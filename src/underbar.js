@@ -38,12 +38,14 @@
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
   _.last = function(array, n) {
-    if (n === undefined)
+    if (n === undefined) {
       return array[array.length - 1];
-    if (n > array.length)
+    }
+    if (n > array.length) {
       return array;
+    }
 
-    return array.slice(array.length - n, array.length)
+    return array.slice(array.length - n, array.length);
   };
 
   // Call iterator(value, key, collection) for each element of collection.
@@ -85,10 +87,10 @@
     var result = [];
     _.each(collection, function(value) {
       //iterator(value, key, collection)
-      if(test(value)) {
+      if (test(value)) {
         result.push(value);
       }
-    })
+    });
 
     return result;
   };
@@ -99,7 +101,7 @@
     // copying code in and modifying it
     return _.filter(collection, function(value) {
       return !test(value);
-    })
+    });
   };
 
   // Produce a duplicate-free version of the array.
@@ -127,7 +129,7 @@
 
     _.each(collection, function(value) {
       results.push(iterator(value));
-    })
+    });
 
     return results;
     // map() is a useful primitive iteration function that works a lot
@@ -268,6 +270,16 @@
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    if (arguments.length > 1) {
+      return _.reduce(arguments, function(extendedObj, addObj) {
+        _.each(addObj, function(item, key) {
+          if (extendedObj[key] === undefined) {
+            extendedObj[key] = item;
+          }
+        });
+        return extendedObj;
+      });
+    }
   };
 
 
@@ -311,6 +323,18 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    var memory = {};
+
+    return function () {
+      var args = _.reduce(arguments, function(accumulator, value) {
+        return accumulator + value.toString();
+      }, '');
+      if (memory[args] === undefined) {
+        memory[args] = func.apply(this, arguments);
+      }
+
+      return memory[args];
+    };
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -320,6 +344,11 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var passingArguments = Array.prototype.slice.call(arguments, 2);
+
+    return setTimeout(function() {
+      return func.apply(this, passingArguments);
+    }, wait);
   };
 
 
@@ -334,6 +363,16 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    var result = array.slice();
+
+    _.each(result, function (item, index) {
+      var randomIndex = Math.floor(Math.random() * result.length);
+      var temp = result[randomIndex];
+      result[randomIndex] = result[index];
+      result[index] = temp;
+    });
+
+    return result;
   };
 
 

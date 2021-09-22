@@ -58,7 +58,7 @@
       it('should return false given an array and a value not in that array', function() {
         // Replace this line with an `expect` statement that tests
         // the behavior described by the `it` string
-        var array = [1,2,3];
+        var array = [1, 2, 3];
         var value = 4;
         expect(_.contains(array, value)).to.be.false;
       });
@@ -93,7 +93,7 @@
       it('fails for a collection of all-falsy values', function() {
         // Replace this line with an `expect` statement that tests
         // the behavior described by the `it` string
-        var array = [1,3,5]
+        var array = [1, 3, 5];
         expect(_.every(array, isEven)).to.be.false;
       });
 
@@ -274,7 +274,14 @@
       it('should copy any property whose key is not already set on the target', function() {
         // Replace this line with an `expect` statement that tests
         // the behavior described by the `it` string
-        throw new Error('This test is missing.');
+        var destination = {};
+        var source = { a: 1, b: 2, c: 'three' };
+
+        _.defaults(destination, source);
+
+        expect(destination.a).to.equal(1);
+        expect(destination.b).to.equal(2);
+        expect(destination.c).to.equal('three');
       });
 
       it('should not copy a property if that key is already set on the target', function() {
